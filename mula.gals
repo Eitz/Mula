@@ -1,0 +1,44 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = String
+Parser = SLR
+#RegularDefinitions
+ignorar: [\ \n\t\r\s]+
+ponto_e_virgula: ;
+tipo_variavel: int|string
+nome_variavel: [a-zA-Z][a-zA-Z0-9_]*
+string: \".*\" |'.*'
+inteiro: [0-9]+
+seta: <\-
+igual: =
+#Tokens
+:{ignorar}
+PONTO_E_VIRGULA:{ponto_e_virgula}
+TIPO_VARIAVEL:{tipo_variavel}
+NOME_VARIAVEL:{nome_variavel}
+STRING:{string}
+INTEIRO:{inteiro}
+SETA:{seta}
+IGUAL:{igual}
+#NonTerminals
+<TUDO>
+<LINHA>
+<DECLARACAO_VARIAVEL>
+<LEITURA_ARQUIVO>
+<ATRIBUICAO>
+<VALOR>
+
+#Grammar
+<TUDO> ::= <LINHA> PONTO_E_VIRGULA <LINHA> | <LINHA> PONTO_E_VIRGULA | <LINHA>;
+<LINHA> ::= <DECLARACAO_VARIAVEL> <LEITURA_ARQUIVO> | <DECLARACAO_VARIAVEL> <ATRIBUICAO>;
+<DECLARACAO_VARIAVEL> ::= TIPO_VARIAVEL NOME_VARIAVEL;
+<LEITURA_ARQUIVO> ::= SETA <VALOR>;
+<VALOR> ::= STRING | NOME_VARIAVEL | INTEIRO;
+<ATRIBUICAO> ::= IGUAL <VALOR>;

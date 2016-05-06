@@ -1,0 +1,16 @@
+int var <- 'var.txt';
+int var2 = 4;
+
+var = run 'java', {a:var, b:5, c:"ABC" }, <%
+	   System.out.println( lang.getParam('c') );
+       int soma = Integer.parseInt(lang.getParam('a')) + Integer.parseInt(lang.getParam('b'));
+       return soma;
+    %>;
+
+out var;
+
+var -> 'result_soma.txt';
+
+var2 = run 'perl', {}, <% my $sum = 5; return $sum; %>;
+
+out var + var2;
