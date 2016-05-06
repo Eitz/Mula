@@ -8,7 +8,7 @@ TITLE
 
 USAGE
 
-	perl run.pl --code 'your perl code comes here'
+	perl run.pl --MULA_CODE 'your perl code comes here'
 
 	single quotes inside the code must be converted to -> '\''
 	\n should be changed to MULA_LINE_BREAK
@@ -22,8 +22,8 @@ RETURN
 
 EXAMPLES
 
-	./interpreters/perl/run.pl --MULA_CODE 'my $total = 0;MULA_LINE_BREAKfor (my $i = 0; $i < 50; $i++) {MULA_LINE_BREAK$total += $i+1;MULA_LINE_BREAK}MULA_LINE_BREAKreturn $total;';
-	./interpreters/perl/run.pl --test '23' --MULA_CODE 'my $t = Mula->getParam("test");MULA_LINE_BREAKreturn $t+10;';
+	./run.pl --MULA_CODE 'my $total = 0;MULA_LINE_BREAKfor (my $i = 0; $i < 50; $i++) {MULA_LINE_BREAK$total += $i+1;MULA_LINE_BREAK}MULA_LINE_BREAKreturn $total;';
+	./run.pl --test '23' --MULA_CODE 'my $t = Mula->getParam("test");MULA_LINE_BREAKreturn $t+10;';
 	
 
 };
