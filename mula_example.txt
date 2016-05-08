@@ -7,10 +7,7 @@ var = run 'java', {a:var, b:5, c:"ABC" }, <%
        return soma;
     %>;
 
-out var;
+var2 = run 'perl', <% my $sum = 5; return $sum; %>;
 
 var -> 'result_soma.txt';
-
-var2 = run 'perl', {}, <% my $sum = 5; return $sum; %>;
-
 out var + var2;
