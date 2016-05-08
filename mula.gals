@@ -18,7 +18,7 @@ tipo_variavel: int|string
 nome_variavel: [a-zA-Z][a-zA-Z0-9_]*
 string: \"[^\"]*\" |'[^']*'
 inteiro: [0-9]+
-seta: <\-
+seta: (<\-)
 igual: =
 mult: \*
 div: /
@@ -28,8 +28,9 @@ abre_p: \(
 fecha_p: \)
 abre_c: \{
 fecha_c: \}
-codigo: <%.*%>
 dois_p: :
+codigo: <%[^%>]*[^>]*%>
+
 #Tokens
 :{ignorar}
 VIRGULA: {virgula}
@@ -70,11 +71,11 @@ DP: {dois_p}
 <LINHA> ::= <DECLARACAO_VARIAVEL> <LEITURA_ARQUIVO> | <DECLARACAO_VARIAVEL> <ATRIBUICAO> | RUN <RUN>;
 <DECLARACAO_VARIAVEL> ::= TIPO_VARIAVEL NOME_VARIAVEL | NOME_VARIAVEL;
 <LEITURA_ARQUIVO> ::= SETA <EXPRESSAO>;
-<ATRIBUICAO> ::= IGUAL <EXPRESSAO> | RUN <RUN>;
+<ATRIBUICAO> ::= IGUAL <EXPRESSAO> | IGUAL RUN <RUN>;
 <EXPRESSAO> ::= <EXPRESSAO> SOMA <EXPRESSAO> | <EXPRESSAO> SUB <B> | <B>;
 <B> ::= <B> MULT <C> | <B> DIV <C> | <C>;
 <C> ::= SUB <C> | <D>;
 <D> ::= AP <EXPRESSAO> FP | STRING | INTEIRO | NOME_VARIAVEL;
-<RUN> ::= <EXPRESSAO> VIRGULA <PARAM_LIST> VIRGULA CODIGO;
+<RUN> ::= <EXPRESSAO> VIRGULA <PARAM_LIST> VIRGULA CODIGO | <EXPRESSAO> VIRGULA CODIGO ;
 <PARAM_LIST> ::= AC <DEC_LIST> FC;
 <DEC_LIST> ::= NOME_VARIAVEL DP <EXPRESSAO> | NOME_VARIAVEL DP <EXPRESSAO> VIRGULA <DEC_LIST>;
