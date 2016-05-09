@@ -13,12 +13,14 @@ Parser = SLR
 ignorar: [\ \n\t\r\s]+
 ponto_e_virgula: ;
 virgula: ,
+palavra_reservada: (out)
 RUN: (run)
 tipo_variavel: int|string
 nome_variavel: [a-zA-Z][a-zA-Z0-9_]*
 string: \"[^\"]*\" |'[^']*'
 inteiro: [0-9]+
-seta: <\-
+seta_leitura: <\-
+seta_escrita: \->
 igual: =
 mult: \*
 div: /
@@ -28,18 +30,21 @@ abre_p: \(
 fecha_p: \)
 abre_c: \{
 fecha_c: \}
-codigo: <%.*%>
 dois_p: :
+codigo: <%[^%>]*[^>]*%>
+
 #Tokens
 :{ignorar}
 VIRGULA: {virgula}
 PONTO_E_VIRGULA:{ponto_e_virgula}
+PALAVRA_RESERVADA: {palavra_reservada}
 RUN: {RUN}
 TIPO_VARIAVEL:{tipo_variavel}
 NOME_VARIAVEL:{nome_variavel}
 STRING:{string}
 INTEIRO:{inteiro}
-SETA:{seta}
+SETA_LEITURA:{seta_leitura}
+SETA_ESCRITA:{seta_escrita}
 IGUAL:{igual}
 SOMA: {soma}
 SUB: {sub}
@@ -57,24 +62,28 @@ DP: {dois_p}
 <LINHA>
 <DECLARACAO_VARIAVEL>
 <LEITURA_ARQUIVO>
+<ESCRITA_ARQUIVO>
 <ATRIBUICAO>
 <EXPRESSAO>
 <B>
 <C>
 <D>
+<EXECUCAO>
 <RUN>
 <PARAM_LIST>
 <DEC_LIST>
 #Grammar
 <TUDO> ::= <LINHA> PONTO_E_VIRGULA <TUDO> | <LINHA> PONTO_E_VIRGULA;
-<LINHA> ::= <DECLARACAO_VARIAVEL> <LEITURA_ARQUIVO> | <DECLARACAO_VARIAVEL> <ATRIBUICAO> | RUN <RUN>;
+<LINHA> ::= <DECLARACAO_VARIAVEL> <LEITURA_ARQUIVO> | <DECLARACAO_VARIAVEL> <ATRIBUICAO> | RUN <RUN> | <ESCRITA_ARQUIVO> | <EXECUCAO>;
 <DECLARACAO_VARIAVEL> ::= TIPO_VARIAVEL NOME_VARIAVEL | NOME_VARIAVEL;
-<LEITURA_ARQUIVO> ::= SETA <EXPRESSAO>;
-<ATRIBUICAO> ::= IGUAL <EXPRESSAO> | RUN <RUN>;
+<LEITURA_ARQUIVO> ::= SETA_LEITURA <EXPRESSAO>;
+<ESCRITA_ARQUIVO> ::= <EXPRESSAO> SETA_ESCRITA <EXPRESSAO>;
+<ATRIBUICAO> ::= IGUAL <EXPRESSAO> | IGUAL RUN <RUN> | <EXECUCAO>;
 <EXPRESSAO> ::= <EXPRESSAO> SOMA <EXPRESSAO> | <EXPRESSAO> SUB <B> | <B>;
 <B> ::= <B> MULT <C> | <B> DIV <C> | <C>;
 <C> ::= SUB <C> | <D>;
 <D> ::= AP <EXPRESSAO> FP | STRING | INTEIRO | NOME_VARIAVEL;
-<RUN> ::= <EXPRESSAO> VIRGULA <PARAM_LIST> VIRGULA CODIGO;
+<EXECUCAO> ::= PALAVRA_RESERVADA <EXPRESSAO>;
+<RUN> ::= <EXPRESSAO> VIRGULA <PARAM_LIST> VIRGULA CODIGO | <EXPRESSAO> VIRGULA CODIGO ;
 <PARAM_LIST> ::= AC <DEC_LIST> FC;
 <DEC_LIST> ::= NOME_VARIAVEL DP <EXPRESSAO> | NOME_VARIAVEL DP <EXPRESSAO> VIRGULA <DEC_LIST>;
