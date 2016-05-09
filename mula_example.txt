@@ -1,13 +1,13 @@
 int var <- 'var.txt';
 int var2 = 4;
+int c = 50;
+var c = run 'java', <%
+	System.out.println( %=c );
+	int soma = Integer.parseInt( %=var ) + Integer.parseInt( %=var2 );
+	return soma;
+%>;
 
-var = run 'java', {a:var, b:5, c:"ABC" }, <%
-	   System.out.println( lang.getParam('c') );
-       int soma = Integer.parseInt(lang.getParam('a')) + Integer.parseInt(lang.getParam('b'));
-       return soma;
-    %>;
-
-var2 = run 'perl', <% my $sum = 5; return $sum; %>;
+var2 = run 'perl', <% my $sum = 5 + %=c; return $sum; %>;
 
 var -> 'result_soma.txt';
 out var + var2;
