@@ -3,6 +3,7 @@ package compiladorcodigojava;
 import interpretador.ExecutorCodigoJava;
 import bsh.EvalError;
 import bsh.Interpreter;
+import interpretador.Mula;
 import java.io.IOException;
 import java.util.Date;
 import org.junit.Assert;
@@ -56,21 +57,20 @@ public class ExecutorCodigoJavaTest {
         int soma = executor.getResultado("c");
         Assert.assertEquals(4, soma);
     }
-    
+
     @Test
     public void testarSaidaNoConsole() {
         ExecutorCodigoJava executor = new ExecutorCodigoJava();
         String codigo = "System.out.println(\"Teste\")";
         executor.executar(codigo);
     }
-    
-      
+
     @Test
-    public void testarPassandoArrayDeParametrosNoFormatoDaNossaLinguatem() {
+    public void testarPassandoArrayDeParametrosNoFormatoDaNossaLinguagem() {
         ExecutorCodigoJava executor = new ExecutorCodigoJava();
-        String parametros = "{int: a, string: b}";
-        // aqui nao sei...
-        String codigo = "System.out.println(\"a = \"+ a + \",b = \" + b)";
-        executor.executar(codigo);
+        executor.setParametros("{a:3, b:3}");
+        executor.executar("int soma = Integer.parseInt(Mula.getParam(\"a\")) + Integer.parseInt(Mula.getParam(\"b\"));");
+        int resultado = executor.getResultado("soma");
+        Assert.assertEquals(6, resultado);
     }
 }
