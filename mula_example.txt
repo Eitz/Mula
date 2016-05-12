@@ -1,6 +1,6 @@
-int var <- 'var.txt';
-int var2 = 4;
-int c = 50;
+var <- 'var.txt';
+var2 = 4;
+c = 50;
 var c = run 'java', <%
 	System.out.println( %=c );
 	int soma = Integer.parseInt( %=var ) + Integer.parseInt( %=var2 );
