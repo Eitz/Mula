@@ -35,28 +35,24 @@ codigo: <%[^%>]*[^>]*%>
 
 #Tokens
 :{ignorar}
-VIRGULA: {virgula}
-PONTO_E_VIRGULA:{ponto_e_virgula}
+",": {virgula}
+";":{ponto_e_virgula}
 PALAVRA_RESERVADA: {palavra_reservada}
 RUN: {RUN}
 TIPO_VARIAVEL:{tipo_variavel}
 NOME_VARIAVEL:{nome_variavel}
 STRING:{string}
 INTEIRO:{inteiro}
-SETA_LEITURA:{seta_leitura}
-SETA_ESCRITA:{seta_escrita}
-IGUAL:{igual}
-SOMA: {soma}
-SUB: {sub}
-MULT: {mult}
-DIV: {div}
-AP: {abre_p}
-FP: {fecha_p}
-VIRG: {virgula}
-AC: {abre_c}
-FC: {fecha_c}
+"<-":{seta_leitura}
+"->":{seta_escrita}
+"=":{igual}
+"+": {soma}
+"-": {sub}
+"*": {mult}
+"/": {div}
+"(": {abre_p}
+")": {fecha_p}
 CODIGO: {codigo}
-DP: {dois_p}
 #NonTerminals
 <TUDO>
 <LINHA>
@@ -71,15 +67,15 @@ DP: {dois_p}
 <EXECUCAO>
 <RUN>
 #Grammar
-<TUDO> ::= <LINHA> PONTO_E_VIRGULA <TUDO> | <LINHA> PONTO_E_VIRGULA;
+<TUDO> ::= <LINHA> ";" <TUDO> | <LINHA> ";";
 <LINHA> ::= <DECLARACAO_VARIAVEL> <LEITURA_ARQUIVO> | <DECLARACAO_VARIAVEL> <ATRIBUICAO> | RUN <RUN> | <ESCRITA_ARQUIVO> | <EXECUCAO>;
-<DECLARACAO_VARIAVEL> ::= TIPO_VARIAVEL NOME_VARIAVEL | NOME_VARIAVEL;
-<LEITURA_ARQUIVO> ::= SETA_LEITURA <EXPRESSAO>;
-<ESCRITA_ARQUIVO> ::= <EXPRESSAO> SETA_ESCRITA <EXPRESSAO>;
-<ATRIBUICAO> ::= IGUAL <EXPRESSAO> | IGUAL RUN <RUN> | <EXECUCAO>;
-<EXPRESSAO> ::= <EXPRESSAO> SOMA <EXPRESSAO> #3 | <EXPRESSAO> SUB #4 <B> | <B>;
-<B> ::= <B> MULT  <C> #5 | <B> DIV <C> #6 | <C>;
-<C> ::= SUB <C> | <D>;
-<D> ::= AP <EXPRESSAO> FP | STRING #2 | INTEIRO #1 | NOME_VARIAVEL;
+<DECLARACAO_VARIAVEL> ::= TIPO_VARIAVEL NOME_VARIAVEL | NOME_VARIAVEL #7;
+<LEITURA_ARQUIVO> ::= "<-" <EXPRESSAO>;
+<ESCRITA_ARQUIVO> ::= <EXPRESSAO> "->" <EXPRESSAO>;
+<ATRIBUICAO> ::= "=" <EXPRESSAO> | "=" RUN <RUN> | <EXECUCAO>;
+<EXPRESSAO> ::= <EXPRESSAO> "+" <EXPRESSAO> #3 | <EXPRESSAO> "-" #4 <B> | <B>;
+<B> ::= <B> "*"  <C> #5 | <B> "/" <C> #6 | <C>;
+<C> ::= "-" <C> | <D>;
+<D> ::= "(" <EXPRESSAO> ")" | STRING #2 | INTEIRO #1 | NOME_VARIAVEL;
 <EXECUCAO> ::= PALAVRA_RESERVADA <EXPRESSAO>;
-<RUN> ::= <EXPRESSAO> VIRGULA CODIGO ;
+<RUN> ::= <EXPRESSAO> "," CODIGO ;
