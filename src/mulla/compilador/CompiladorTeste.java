@@ -12,12 +12,15 @@ import gals.Semantico;
 import gals.Sintatico;
 import gals.SyntaticError;
 
+import java.util.HashMap;
+import java.util.HashSet;
 import java.util.Stack;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
 public class CompiladorTeste {
     public static Stack<Object> pilha = new Stack<>();
+	public static HashMap<String, Variavel> variaveis = new HashMap<>();
 
     public static void main(String[] args) {
         try {

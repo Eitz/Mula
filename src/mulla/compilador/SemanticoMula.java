@@ -7,8 +7,8 @@ import mulla.compilador.somador.SomadorFactory;
 
 public class SemanticoMula {
 
-	private static int na;
-	private static int nb;
+	private static int intA;
+	private static int intB;
 
 	public static void executeAction(int action, Token token)	throws SemanticError
     {
@@ -29,16 +29,23 @@ public class SemanticoMula {
 			break;
 		case 4:
 			extraiInteirosDaPilha();
-			CompiladorTeste.pilha.push( na-nb );
+			CompiladorTeste.pilha.push( intA-intB );
 			break;
 		case 5:
 			extraiInteirosDaPilha();
-			CompiladorTeste.pilha.push( na*nb );
+			CompiladorTeste.pilha.push( intA*intB );
 			break;
 		case 6:
 			extraiInteirosDaPilha();
-			CompiladorTeste.pilha.push( na/nb );
+			CompiladorTeste.pilha.push( intA/intB );
 			break;
+		case 7: // declaracao
+			String nomeVar = token.getLexeme();
+			Variavel var = new Variavel(nomeVar);
+			CompiladorTeste.variaveis.put(nomeVar, var);
+			break;
+		case 8: // atribuição
+			
 		default:
 			break;
 		}
@@ -49,8 +56,8 @@ public class SemanticoMula {
 		Object b;
 		b = CompiladorTeste.pilha.pop();
 		a = CompiladorTeste.pilha.pop();
-		na = Integer.parseInt(a.toString());
-		nb = Integer.parseInt(b.toString());
+		intA = Integer.parseInt(a.toString());
+		intB = Integer.parseInt(b.toString());
 	}	
 	
 }
