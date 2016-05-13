@@ -10,6 +10,7 @@ public class ExecutorCodigoJava {
     private final Interpreter interpretador;
     private StringBuilder sb;
     private String parametros;
+    private Object retorno;
 
     public ExecutorCodigoJava() {
         interpretador = new Interpreter();
@@ -30,7 +31,7 @@ public class ExecutorCodigoJava {
     public void executar(String codigo) {
         try {
             sb.append(codigo);
-            interpretador.eval(sb.toString());
+            retorno = interpretador.eval(sb.toString());
         } catch (EvalError ex) {
             Logger.getLogger(ExecutorCodigoJava.class.getName()).log(Level.SEVERE, null, ex);
             throw new ErroSintaxe(ex);
@@ -44,6 +45,10 @@ public class ExecutorCodigoJava {
             Logger.getLogger(ExecutorCodigoJava.class.getName()).log(Level.SEVERE, null, ex);
             throw new ErroSintaxe(ex);
         }
+    }
+
+    public Object getResultado() {
+        return retorno;
     }
 
 }

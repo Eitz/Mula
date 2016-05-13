@@ -73,4 +73,12 @@ public class ExecutorCodigoJavaTest {
         int resultado = executor.getResultado("soma");
         Assert.assertEquals(6, resultado);
     }
+    
+    @Test
+    public void qdoTemPalavraReturnRetornaValorSubsquente() {
+        ExecutorCodigoJava executor = new ExecutorCodigoJava();
+        executor.executar("return 6");
+        int resultado = (int) executor.getResultado();
+        Assert.assertEquals(6, resultado);
+    }
 }
