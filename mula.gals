@@ -1,0 +1,83 @@
+#Options
+GenerateScanner = true
+GenerateParser = true
+Language = Java
+ScannerName = Lexico
+ParserName = Sintatico
+SemanticName = Semantico
+ScannerCaseSensitive = true
+ScannerTable = Full
+Input = Stream
+Parser = SLR
+#RegularDefinitions
+comment: "(*"[^"*"]*"*)"
+ignorar: [\ \n\t\r\s]+
+ponto_e_virgula: ;
+virgula: ,
+palavra_reservada: (out)
+RUN: (run)
+tipo_variavel: int|string
+nome_variavel: [a-zA-Z][a-zA-Z0-9_]*
+string: \"[^\"]*\" |'[^']*'
+inteiro: [0-9]+
+seta_leitura: <\-
+seta_escrita: \->
+igual: =
+mult: \*
+div: /
+soma: \+
+sub: \-
+abre_p: \(
+fecha_p: \)
+abre_c: \{
+fecha_c: \}
+dois_p: :
+codigo: <%[^%>]*[^>]*%>
+
+#Tokens
+:!{comment}
+:{ignorar}
+",": {virgula}
+";":{ponto_e_virgula}
+PALAVRA_RESERVADA: {palavra_reservada}
+RUN: {RUN}
+TIPO_VARIAVEL:{tipo_variavel}
+NOME_VARIAVEL:{nome_variavel}
+STRING:{string}
+INTEIRO:{inteiro}
+"<-":{seta_leitura}
+"->":{seta_escrita}
+"=":{igual}
+"+": {soma}
+"-": {sub}
+"*": {mult}
+"/": {div}
+"(": {abre_p}
+")": {fecha_p}
+CODIGO: {codigo}
+#NonTerminals
+<TUDO>
+<LINHA>
+<LEITURA_ARQUIVO>
+<ESCRITA_ARQUIVO>
+<ATRIBUICAO>
+<ATRIBUIVEIS>
+<EXPRESSAO>
+<A>
+<B>
+<C>
+<EXECUCAO>
+<RUN>
+#Grammar
+<TUDO> ::= <LINHA> ";" <TUDO> | <LINHA> ";";
+<LINHA> ::= <ATRIBUICAO> | <EXPRESSAO> | <ESCRITA_ARQUIVO> | <LEITURA_ARQUIVO> | <EXECUCAO> | <RUN>;
+<LEITURA_ARQUIVO> ::= NOME_VARIAVEL "<-" <EXPRESSAO>;
+<ESCRITA_ARQUIVO> ::= <EXPRESSAO> "->" <EXPRESSAO>;
+<ATRIBUICAO> ::= NOME_VARIAVEL #7 "=" <ATRIBUIVEIS>;
+<ATRIBUIVEIS> ::= <EXPRESSAO> | <EXECUCAO> | RUN <RUN>;
+<EXPRESSAO> ::= <EXPRESSAO> "+" <A> #3 | <EXPRESSAO> "-" #4 <A> | <A>;
+<A> ::= <A> "*"  <B> #5 | <A> "/" <B> #6 | <B>;
+<B> ::= "-" <B> | <C>;
+<C> ::= "(" <EXPRESSAO> ")" | STRING #2 | INTEIRO #1 | NOME_VARIAVEL;
+<EXECUCAO> ::= PALAVRA_RESERVADA <EXPRESSAO>;
+<RUN> ::= <EXPRESSAO> "," CODIGO;

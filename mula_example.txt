@@ -1,0 +1,13 @@
+var <- 'var.txt';
+var2 = 4;
+c = 50;
+var c = run 'java', <%
+	System.out.println( %=c );
+	int soma = Integer.parseInt( %=var ) + Integer.parseInt( %=var2 );
+	return soma;
+%>;
+
+var2 = run 'perl', <% my $sum = 5 + %=c; return $sum; %>;
+
+var -> 'result_soma.txt';
+out var + var2;

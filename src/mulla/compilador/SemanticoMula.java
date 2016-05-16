@@ -157,4 +157,5 @@ public class SemanticoMula {
 			return valorOuVariavel.toString();
 	}
 
+
 }
