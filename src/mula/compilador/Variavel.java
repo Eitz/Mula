@@ -1,5 +1,7 @@
 package mula.compilador;
 
+import mula.compilador.somador.impl.StringUtil;
+
 public class Variavel {
 	private Tipo tipo;
 	private String nome;
@@ -33,6 +35,8 @@ public class Variavel {
 	}
 
 	public Object getValor() {
+		if(valor instanceof String)
+			return StringUtil.removeAspas(valor.toString());
 		return valor;
 	}
 
