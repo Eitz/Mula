@@ -1,6 +1,6 @@
 package gals;
 
-import mulla.compilador.SemanticoMula;
+import mula.compilador.SemanticoMula;
 
 public class Semantico implements Constants
 {

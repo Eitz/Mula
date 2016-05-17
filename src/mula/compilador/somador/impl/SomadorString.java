@@ -1,6 +1,6 @@
-package mulla.compilador.somador.impl;
+package mula.compilador.somador.impl;
 
-import mulla.compilador.somador.Somador;
+import mula.compilador.somador.Somador;
 
 public class SomadorString implements Somador<String> {
 

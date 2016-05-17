@@ -1,7 +1,7 @@
-package mulla.compilador.somador;
+package mula.compilador.somador;
 
-import mulla.compilador.somador.impl.SomadorInteiros;
-import mulla.compilador.somador.impl.SomadorString;
+import mula.compilador.somador.impl.SomadorInteiros;
+import mula.compilador.somador.impl.SomadorString;
 
 public class SomadorFactory {
 

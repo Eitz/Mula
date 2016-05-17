@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import mulla.compilador.CompiladorTeste;
+import mula.compilador.CompiladorTeste;
 
 import org.junit.After;
 import org.junit.Before;
@@ -60,7 +60,7 @@ public class CompiladorTestTest {
 				"a = 2;"
 			  + "a = a * 3;");
 		//@formatter:on
-		assertEquals(valorDe("a"), 6);
+		assertEquals(6, valorDe("a"));
 	}
 
 	@Test
@@ -113,11 +113,12 @@ public class CompiladorTestTest {
 			"var <- 'var.txt';"+ // var.txt = 37
 			"var2 = 4; "+
 			"c = 50; " +
-			"c = run 'java', <% " +
+			"c = run 'java', <%" +
 			"	System.out.println( %=c ); " +
 			"	int soma = Integer.parseInt( %=var ) + Integer.parseInt( %=var2 ); " +
 			"	return soma; " +
-			" %>;");
+			" %>;"
+			);
 // @formatter:on
 		assertEquals(41, valorDe("c"));
 	}

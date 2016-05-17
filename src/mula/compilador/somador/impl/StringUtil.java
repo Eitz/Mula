@@ -1,4 +1,4 @@
-package mulla.compilador.somador.impl;
+package mula.compilador.somador.impl;
 
 public class StringUtil {
 

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package mulla.compilador;
+package mula.compilador;
 
 import gals.LexicalError;
 import gals.Lexico;

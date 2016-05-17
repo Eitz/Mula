@@ -1,4 +1,4 @@
-package mulla.compilador;
+package mula.compilador;
 
 public class Variavel {
 	private Tipo tipo;

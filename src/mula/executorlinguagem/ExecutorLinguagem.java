@@ -1,4 +1,4 @@
-package mulla.executorlinguagem;
+package mula.executorlinguagem;
 
 public interface ExecutorLinguagem {
 

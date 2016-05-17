@@ -1,4 +1,4 @@
-package mulla.compilador;
+package mula.compilador;
 
 import gals.Token;
 
@@ -9,9 +9,11 @@ import java.nio.file.Paths;
 import java.util.Arrays;
 import java.util.List;
 
-import mulla.compilador.somador.Somador;
-import mulla.compilador.somador.SomadorFactory;
-import mulla.compilador.somador.impl.StringUtil;
+import mula.compilador.somador.Somador;
+import mula.compilador.somador.SomadorFactory;
+import mula.compilador.somador.impl.StringUtil;
+import mula.executorlinguagem.ExecutorLinguagem;
+import mula.executorlinguagem.ExecutorLinguagemFactory;
 
 public class SemanticoMula {
 
@@ -67,7 +69,7 @@ public class SemanticoMula {
 			escreveConsole();
 			break;
 		case 13:
-			//String linguagem = pop().toString();
+			run(token);
 			break;
 		default:
 			break;
@@ -110,7 +112,7 @@ public class SemanticoMula {
 	}
 
 	private static void leArquivo() throws IOException {
-		String nomeArquivo = getValorDiretoOuValorDaVariavel(pop());
+		String nomeArquivo = popValue();
 		nomeVariavel = pop().toString();
 		String conteudoArquivo = leConteudoArquivo(nomeArquivo);
 		getVariavel(nomeVariavel).setValor(conteudoArquivo);
@@ -126,20 +128,44 @@ public class SemanticoMula {
 	}
 
 	private static void escreveArquivo() throws IOException {
-		String nomeArquivo = StringUtil
-				.removeAspas(getValorDiretoOuValorDaVariavel(pop()));
-		String conteudoEscrever = StringUtil
-				.removeAspas(getValorDiretoOuValorDaVariavel(pop()));
+		String nomeArquivo = StringUtil.removeAspas(popValue());
+		String conteudoEscrever = StringUtil.removeAspas(popValue());
 		Files.write(Paths.get(nomeArquivo), Arrays.asList(conteudoEscrever),
 				Charset.forName("UTF-8"));
+	}
+
+	private static void run(Token token) {
+		String linguagem = StringUtil.removeAspas(popValue());
+		ExecutorLinguagem executor = ExecutorLinguagemFactory
+				.criaExecutor(linguagem);
+		String codigoFonte = corrigeCodigo(token.getLexeme());
+		executor.executa(codigoFonte);
+		if (executor.temRetorno()) {
+			push(executor.getRetorno());
+		}
+	}
+
+	private static String corrigeCodigo(String codigoFonte) {
+		for (String nomeVariavel : CompiladorTeste.variaveis.keySet()) {
+			Variavel v = CompiladorTeste.variaveis.get(nomeVariavel);
+			String valorVariavel = v.getValor().toString();
+			codigoFonte = codigoFonte.replaceAll("%=" + nomeVariavel,
+					valorVariavel);
+		}
+		codigoFonte = codigoFonte.replaceAll("<%|%>", "");
+		return codigoFonte;
 	}
 
 	private static Object pop() {
 		return CompiladorTeste.pilha.pop();
 	}
 
+	private static String popValue() {
+		return getValorDiretoOuValorDaVariavel(pop());
+	}
+
 	private static void put(String nomeVariavel2, Variavel var2) {
-		CompiladorTeste.variaveis.put(nomeVariavel,var);
+		CompiladorTeste.variaveis.put(nomeVariavel, var);
 	}
 
 	private static Object push(Object item) {
@@ -149,13 +175,12 @@ public class SemanticoMula {
 	private static Variavel getVariavel(String lexeme) {
 		return CompiladorTeste.variaveis.get(lexeme);
 	}
-	
+
 	private static String getValorDiretoOuValorDaVariavel(Object valorOuVariavel) {
 		if (valorOuVariavel instanceof Variavel)
 			return ((Variavel) valorOuVariavel).getValor().toString();
 		else
 			return valorOuVariavel.toString();
 	}
-
 
 }

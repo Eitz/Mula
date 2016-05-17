@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import mulla.compilador.CompiladorTeste;
+import mula.compilador.CompiladorTeste;
 
 import org.junit.After;
 import org.junit.Before;

@@ -1,4 +1,4 @@
-package mulla.compilador.somador;
+package mula.compilador.somador;
 
 public interface Somador<E> {
 
