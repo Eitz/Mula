@@ -1,13 +1,24 @@
-var <- 'var.txt';
-var2 = 4;
-c = 50;
-var c = run 'java', <%
-	System.out.println( %=c );
-	int soma = Integer.parseInt( %=var ) + Integer.parseInt( %=var2 );
+(*
+	Primeiro arquivo
+	feito no Mula
+*)
+
+multi = 50 * 32;
+soma = multi + 2;
+
+soma -> 'meu_arquivo.txt';
+
+valor = run 'java', <%
+	System.out.println( %=multi );
+	int soma = Integer.parseInt( %=soma ) + Integer.parseInt( %=multi );
 	return soma;
 %>;
 
-var2 = run 'perl', <% my $sum = 5 + %=c; return $sum; %>;
+valor = run 'perl', <% my $sum = 5 + %=valor; return $sum; %>;
+valor -> 'result_soma.txt';
 
-var -> 'result_soma.txt';
-out var + var2;
+(*
+	Comentário marotão
+*)
+
+out soma + valor;
