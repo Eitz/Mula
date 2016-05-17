@@ -100,8 +100,8 @@ public class CompiladorTestTest {
 	public void testEscritaArquivoVariavel() {
 		CompiladorTeste.test(
 // @formatter:off
-				"texto = 'bla bla';" + 
-				"texto -> 'textoBlaBla.txt';");
+			"texto = 'bla bla';" + 
+			"texto -> 'textoBlaBla.txt';");
 // @formatter:on
 		assertEquals("bla bla", leTexto(new File("textoBlaBla.txt")));
 	}
@@ -111,11 +111,12 @@ public class CompiladorTestTest {
 		CompiladorTeste.test(
 // @formatter:off
 			"var <- 'var.txt';"+ // var.txt = 37
+			"out var;" +
 			"var2 = 4; "+
 			"c = 50; " +
 			"c = run 'java', <%" +
 			"	System.out.println( %=c ); " +
-			"	int soma = Integer.parseInt( %=var ) + Integer.parseInt( %=var2 ); " +
+			"	int soma = %=var + %=var2; " +
 			"	return soma; " +
 			" %>;"
 			);

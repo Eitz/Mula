@@ -6,7 +6,10 @@ import java.io.IOException;
 import java.nio.charset.Charset;
 import java.nio.file.Files;
 import java.nio.file.Paths;
+import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Collections;
+import java.util.Comparator;
 import java.util.List;
 
 import mula.compilador.somador.Somador;
@@ -21,7 +24,6 @@ public class SemanticoMula {
 	private static int intB;
 	private static String nomeVariavel;
 	private static Variavel var;
-	private static Object a, b;
 
 	public static void executeAction(int action, Token token) throws Exception {
 		switch (action) {
@@ -32,11 +34,9 @@ public class SemanticoMula {
 			push(token.getLexeme());
 			break;
 		case 3:
-			b = pop();
-			a = pop();
-			Somador<?> somador = SomadorFactory.criaSomador(a, b);
-			Object soma = somador.soma(a, b);
-			push(soma);
+			Object b = pop();
+			Object a = pop();
+			push(soma(b, a));
 			break;
 		case 4:
 			extraiInteirosDaPilha();
@@ -76,10 +76,15 @@ public class SemanticoMula {
 		}
 	}
 
+	private static Object soma(Object b, Object a) {
+		Somador<?> somador = SomadorFactory.criaSomador(a, b);
+		Object soma = somador.soma(a, b);
+		return soma;
+	}
+
 	private static void escreveConsole() {
-		Object pop = pop();
-		String out = getValorDiretoOuValorDaVariavel(pop);
-		System.out.print(out);
+		String valorPrintar = popValue();
+		System.out.print(valorPrintar);
 	}
 
 	private static void extraiInteirosDaPilha() {
@@ -101,9 +106,9 @@ public class SemanticoMula {
 	}
 
 	private static void executaAtribuicao() {
-		a = pop();
-		nomeVariavel = pop().toString();
-		getVariavel(nomeVariavel).setValor(a);
+		Object valorExpressao = pop();
+		String nomeVariavel = pop().toString();
+		getVariavel(nomeVariavel).setValor(valorExpressao);
 	}
 
 	private static void empilhaValorVariavel(Token token) {
@@ -113,14 +118,13 @@ public class SemanticoMula {
 
 	private static void leArquivo() throws IOException {
 		String nomeArquivo = popValue();
-		nomeVariavel = pop().toString();
+		String nomeVariavel = pop().toString();
 		String conteudoArquivo = leConteudoArquivo(nomeArquivo);
 		getVariavel(nomeVariavel).setValor(conteudoArquivo);
 	}
 
 	private static String leConteudoArquivo(String nomeArquivo)
 			throws IOException {
-		nomeArquivo = StringUtil.removeAspas(nomeArquivo);
 		List<String> lines = Files.readAllLines(Paths.get(nomeArquivo));
 		StringBuilder conteudoArquivo = new StringBuilder();
 		lines.forEach(conteudoArquivo::append);
@@ -128,14 +132,14 @@ public class SemanticoMula {
 	}
 
 	private static void escreveArquivo() throws IOException {
-		String nomeArquivo = StringUtil.removeAspas(popValue());
-		String conteudoEscrever = StringUtil.removeAspas(popValue());
+		String nomeArquivo = popValue();
+		String conteudoEscrever = popValue();
 		Files.write(Paths.get(nomeArquivo), Arrays.asList(conteudoEscrever),
 				Charset.forName("UTF-8"));
 	}
 
 	private static void run(Token token) {
-		String linguagem = StringUtil.removeAspas(popValue());
+		String linguagem = popValue();
 		ExecutorLinguagem executor = ExecutorLinguagemFactory
 				.criaExecutor(linguagem);
 		String codigoFonte = corrigeCodigo(token.getLexeme());
@@ -146,12 +150,47 @@ public class SemanticoMula {
 	}
 
 	private static String corrigeCodigo(String codigoFonte) {
-		for (String nomeVariavel : CompiladorTeste.variaveis.keySet()) {
+		/*
+		 * Ordena os nomes das variáveis, colocando 
+		 * os nomes maiores primeiro. Isso é feito para que
+		 * no momento do replace, sejam substituidas primeiros
+		 * os nomes maiores, para que não ocorra o problema 
+		 * de substituir o valor de 'var' em %=var2, por exemplo.
+		 */
+		List<String> nomesVariaveis = ordenaNomesVariaveis();
+		codigoFonte = executaReplace(codigoFonte, nomesVariaveis);
+		codigoFonte = removeMarcadoresDeInicioEhFim(codigoFonte);
+		return codigoFonte;
+	}
+
+	private static List<String> ordenaNomesVariaveis() {
+		Comparator<String> comparator = (sa,sb) -> {
+			if( sa.length() > sb.length() ){
+				return -1; 
+			} else if(sa.length() > sb.length()){
+				return 1;
+			} else {
+				return sa.compareTo(sb);
+			}
+		};
+		
+		List<String> nomesVariaveis = new ArrayList<>(CompiladorTeste.variaveis.keySet());
+		Collections.sort(nomesVariaveis, comparator);
+		return nomesVariaveis;
+	}
+
+	private static String executaReplace(String codigoFonte,
+			List<String> nomesVariaveis) {
+		for (String nomeVariavel : nomesVariaveis) {
 			Variavel v = CompiladorTeste.variaveis.get(nomeVariavel);
 			String valorVariavel = v.getValor().toString();
 			codigoFonte = codigoFonte.replaceAll("%=" + nomeVariavel,
 					valorVariavel);
 		}
+		return codigoFonte;
+	}
+
+	private static String removeMarcadoresDeInicioEhFim(String codigoFonte) {
 		codigoFonte = codigoFonte.replaceAll("<%|%>", "");
 		return codigoFonte;
 	}
@@ -161,7 +200,7 @@ public class SemanticoMula {
 	}
 
 	private static String popValue() {
-		return getValorDiretoOuValorDaVariavel(pop());
+		return StringUtil.removeAspas(getValorDiretoOuValorDaVariavel(pop()));
 	}
 
 	private static void put(String nomeVariavel2, Variavel var2) {

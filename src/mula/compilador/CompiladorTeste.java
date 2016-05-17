@@ -30,10 +30,4 @@ public class CompiladorTeste {
 			throw new RuntimeException(e);
 		}
 	}
-
-	public static void main(String[] args) {
-		CompiladorTeste.test("a = 2 * (3 + 5);" + "b = 14 * (10 / 5);"
-				+ "c = a + b;" + "c = c + 6;");
-	}
-
 }
