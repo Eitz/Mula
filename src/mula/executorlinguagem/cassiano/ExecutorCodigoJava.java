@@ -9,24 +9,10 @@ import bsh.Interpreter;
 public class ExecutorCodigoJava {
 
     private final Interpreter interpretador;
-    private StringBuilder sb;
-    private String parametros;
     private Object retorno;
 
     public ExecutorCodigoJava() {
         interpretador = new Interpreter();
-        sb = new StringBuilder();
-    }
-
-    public void setParametros(String parametros) {
-        this.parametros = parametros;
-        sb = new StringBuilder();
-        sb
-                .append("import mula.executorlinguagem.cassiano.Mula; ")
-                .append("Mula.setParams")
-                .append(" (\" ")
-                .append(parametros)
-                .append(" \"); ");
     }
 
     public void executar(String codigo) {
