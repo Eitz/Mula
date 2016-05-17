@@ -1,0 +1,43 @@
+# [PackageDev] target_format: plist, ext: tmLanguage
+---
+name: Mula
+scopeName: source.mula
+fileTypes: [mula]
+uuid: 4c5f0867-bb81-408f-a2f9-2765cfdaf415
+
+patterns:
+- comment: other languages
+  name: support.function
+  begin: '<%'
+  end: '%>'
+  patterns:
+  - name: variable.parameter
+    match: '%=([a-zA-Z]+[_a-zA-Z0-9]*)'
+
+
+- comment: comments
+  name: comment.block
+  begin: '\(\*'
+  end: '\*\)'
+
+- comment: reserved words
+  name: entity.name.function
+  match: '(run|out)'
+
+- comment: operators
+  name: keyword.operator
+  match: '(\-\>|\<\-|\+|\-|\*|\/|\=)'
+
+- comment: strings
+  name: string.quoted
+  match: (\'.*\')
+
+- comment: variables
+  name: entity.name.type
+  match: '([a-zA-Z]+[_a-zA-Z0-9]*)'
+
+- comment: integers
+  name: constant.numeric
+  match: \d+
+
+...
