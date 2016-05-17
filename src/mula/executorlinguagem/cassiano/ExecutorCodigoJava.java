@@ -31,8 +31,7 @@ public class ExecutorCodigoJava {
 
     public void executar(String codigo) {
         try {
-            sb.append(codigo);
-            retorno = interpretador.eval(sb.toString());
+            retorno = interpretador.eval(codigo);
         } catch (EvalError ex) {
             Logger.getLogger(ExecutorCodigoJava.class.getName()).log(Level.SEVERE, null, ex);
             throw new ErroSintaxe(ex);
