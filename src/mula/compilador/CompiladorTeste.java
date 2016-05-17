@@ -25,7 +25,6 @@ public class CompiladorTeste {
 		Semantico sem = new Semantico();
 		try {
 			sin.parse(lex, sem);
-			// variaveis.values().forEach(System.out::println);
 		} catch (LexicalError | SyntaticError | SemanticError e) {
 			throw new RuntimeException(e);
 		}

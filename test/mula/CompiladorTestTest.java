@@ -111,7 +111,6 @@ public class CompiladorTestTest {
 		CompiladorTeste.test(
 // @formatter:off
 			"var <- 'var.txt';"+ // var.txt = 37
-			"out var;" +
 			"var2 = 4; "+
 			"c = 50; " +
 			"c = run 'java', <%" +
@@ -123,6 +122,19 @@ public class CompiladorTestTest {
 // @formatter:on
 		assertEquals(41, valorDe("c"));
 	}
+
+	@Test
+	public void executaJavaMostraNome() {
+		CompiladorTeste.test(
+// @formatter:off
+			"nomeCassiano = 'Cassiano';" +
+			"run 'java', <%"
+			+ " System.out.println(\"%=nomeCassiano\");" +
+			" %>;"
+			);
+// @formatter:on
+	}
+	
 
 	private Object valorDe(String key) {
 		return CompiladorTeste.variaveis.get(key).getValor();
