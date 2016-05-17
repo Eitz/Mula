@@ -12,11 +12,11 @@ Suporte a:
 ### Instalação e execução
  1. Mova o arquivo mula para a pasta /usr/bin, com permissão de execução
  2. Escreva um arquivo de teste e salve como hello.mula
-     ```sh
+     ```
     out 'Hello World Mula!!';
     ```
  3. Execute 
-     ```sh
+     ```
     mula hello.mula
     ```
 
