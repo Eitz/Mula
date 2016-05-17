@@ -84,7 +84,7 @@ public class SemanticoMula {
 
 	private static void escreveConsole() {
 		String valorPrintar = popValue();
-		System.out.print(valorPrintar);
+		System.out.println(valorPrintar);
 	}
 
 	private static void extraiInteirosDaPilha() {
@@ -96,8 +96,8 @@ public class SemanticoMula {
 
 	private static void declaraVariavel(Token token) {
 		nomeVariavel = token.getLexeme();
-		if (CompiladorTeste.variaveis.containsKey(nomeVariavel)) {
-			var = CompiladorTeste.variaveis.get(nomeVariavel);
+		if (Mula.variaveis.containsKey(nomeVariavel)) {
+			var = Mula.variaveis.get(nomeVariavel);
 		} else {
 			var = new Variavel(nomeVariavel);
 		}
@@ -113,7 +113,7 @@ public class SemanticoMula {
 
 	private static void empilhaValorVariavel(Token token) {
 		Variavel variavel = getVariavel(token.getLexeme());
-		CompiladorTeste.pilha.push(variavel.getValor());
+		Mula.pilha.push(variavel.getValor());
 	}
 
 	private static void leArquivo() throws IOException {
@@ -174,7 +174,7 @@ public class SemanticoMula {
 			}
 		};
 		
-		List<String> nomesVariaveis = new ArrayList<>(CompiladorTeste.variaveis.keySet());
+		List<String> nomesVariaveis = new ArrayList<>(Mula.variaveis.keySet());
 		Collections.sort(nomesVariaveis, comparator);
 		return nomesVariaveis;
 	}
@@ -182,7 +182,7 @@ public class SemanticoMula {
 	private static String executaReplace(String codigoFonte,
 			List<String> nomesVariaveis) {
 		for (String nomeVariavel : nomesVariaveis) {
-			Variavel v = CompiladorTeste.variaveis.get(nomeVariavel);
+			Variavel v = Mula.variaveis.get(nomeVariavel);
 			String valorVariavel = v.getValor().toString();
 			codigoFonte = codigoFonte.replaceAll("%=" + nomeVariavel,
 					valorVariavel);
@@ -196,7 +196,7 @@ public class SemanticoMula {
 	}
 
 	private static Object pop() {
-		return CompiladorTeste.pilha.pop();
+		return Mula.pilha.pop();
 	}
 
 	private static String popValue() {
@@ -204,15 +204,15 @@ public class SemanticoMula {
 	}
 
 	private static void put(String nomeVariavel2, Variavel var2) {
-		CompiladorTeste.variaveis.put(nomeVariavel, var);
+		Mula.variaveis.put(nomeVariavel, var);
 	}
 
 	private static Object push(Object item) {
-		return CompiladorTeste.pilha.push(item);
+		return Mula.pilha.push(item);
 	}
 
 	private static Variavel getVariavel(String lexeme) {
-		return CompiladorTeste.variaveis.get(lexeme);
+		return Mula.variaveis.get(lexeme);
 	}
 
 	private static String getValorDiretoOuValorDaVariavel(Object valorOuVariavel) {

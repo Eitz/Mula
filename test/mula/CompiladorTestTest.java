@@ -8,7 +8,7 @@ import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Arrays;
 
-import mula.compilador.CompiladorTeste;
+import mula.compilador.Mula;
 
 import org.junit.After;
 import org.junit.Before;
@@ -40,7 +40,7 @@ public class CompiladorTestTest {
 	@Test
 	public void test() {
 		//@formatter:off
-		CompiladorTeste.test(
+		Mula.execute(
 				"a = 2 * (3 + 5);" + 
 				"b = 14 * (10 / 5);"
 			);
@@ -56,7 +56,7 @@ public class CompiladorTestTest {
 	@Test
 	public void test_2() {
 		//@formatter:off
-		CompiladorTeste.test(
+		Mula.execute(
 				"a = 2;"
 			  + "a = a * 3;");
 		//@formatter:on
@@ -65,7 +65,7 @@ public class CompiladorTestTest {
 
 	@Test
 	public void testLeituraArquivo() {
-		CompiladorTeste.test("a <- 'teste.txt';");
+		Mula.execute("a <- 'teste.txt';");
 		assertEquals(TEXTO_ARQUIVO_TESTE, valorDe("a"));
 	}
 
@@ -91,14 +91,14 @@ public class CompiladorTestTest {
 
 	@Test
 	public void testEscritaArquivo() {
-		CompiladorTeste.test("'string do texto' -> '" + TEXTO_ESCRITO_TXT
+		Mula.execute("'string do texto' -> '" + TEXTO_ESCRITO_TXT
 				+ "';");
 		assertEquals("string do texto", leTexto(new File(TEXTO_ESCRITO_TXT)));
 	}
 
 	@Test
 	public void testEscritaArquivoVariavel() {
-		CompiladorTeste.test(
+		Mula.execute(
 // @formatter:off
 			"texto = 'bla bla';" + 
 			"texto -> 'textoBlaBla.txt';");
@@ -108,7 +108,7 @@ public class CompiladorTestTest {
 
 	@Test
 	public void executaJava() {
-		CompiladorTeste.test(
+		Mula.execute(
 // @formatter:off
 			"var <- 'var.txt';"+ // var.txt = 37
 			"var2 = 4; "+
@@ -125,7 +125,7 @@ public class CompiladorTestTest {
 
 	@Test
 	public void executaJavaMostraNome() {
-		CompiladorTeste.test(
+		Mula.execute(
 // @formatter:off
 			"nomeCassiano = 'Cassiano';" +
 			"run 'java', <%"
@@ -137,7 +137,7 @@ public class CompiladorTestTest {
 	
 
 	private Object valorDe(String key) {
-		return CompiladorTeste.variaveis.get(key).getValor();
+		return Mula.variaveis.get(key).getValor();
 	}
 
 }

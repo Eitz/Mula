@@ -5,7 +5,7 @@ import static org.junit.Assert.*;
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
 
-import mula.compilador.CompiladorTeste;
+import mula.compilador.Mula;
 
 import org.junit.After;
 import org.junit.Before;
@@ -31,7 +31,7 @@ public class CompiladorTestTestAcaoOut {
 	@Test
 	public void testOut(){
 		//@formatter:on
-		CompiladorTeste.test(
+		Mula.execute(
 				"a = 1+3;"
 				+"out a * 2;");
 		//@formatter:off

@@ -12,14 +12,17 @@ import gals.Semantico;
 import gals.Sintatico;
 import gals.SyntaticError;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Stack;
 
-public class CompiladorTeste {
+public class Mula {
 	public static Stack<Object> pilha = new Stack<>();
 	public static HashMap<String, Variavel> variaveis = new HashMap<>();
 
-	public static void test(String mulaCode) {
+	public static void execute(String mulaCode) {
 		Lexico lex = new Lexico(mulaCode);
 		Sintatico sin = new Sintatico();
 		Semantico sem = new Semantico();
@@ -29,4 +32,5 @@ public class CompiladorTeste {
 			throw new RuntimeException(e);
 		}
 	}
+
 }
