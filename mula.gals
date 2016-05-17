@@ -7,14 +7,15 @@ ParserName = Sintatico
 SemanticName = Semantico
 ScannerCaseSensitive = true
 ScannerTable = Full
-Input = Stream
+Input = String
 Parser = SLR
 #RegularDefinitions
 comment: "(*"[^"*"]*"*)"
 ignorar: [\ \n\t\r\s]+
+COMMENT : "(*" [^ "*" ]* "*)"
 ponto_e_virgula: ;
 virgula: ,
-palavra_reservada: (out)
+out: (out)
 RUN: (run)
 tipo_variavel: int|string
 nome_variavel: [a-zA-Z][a-zA-Z0-9_]*
@@ -37,9 +38,10 @@ codigo: <%[^%>]*[^>]*%>
 #Tokens
 :!{comment}
 :{ignorar}
+:! {COMMENT}
 ",": {virgula}
 ";":{ponto_e_virgula}
-PALAVRA_RESERVADA: {palavra_reservada}
+PRINT_OUT: {out}
 RUN: {RUN}
 TIPO_VARIAVEL:{tipo_variavel}
 NOME_VARIAVEL:{nome_variavel}
@@ -66,18 +68,20 @@ CODIGO: {codigo}
 <A>
 <B>
 <C>
-<EXECUCAO>
+<PRINT_OUT>
 <RUN>
 #Grammar
 <TUDO> ::= <LINHA> ";" <TUDO> | <LINHA> ";";
-<LINHA> ::= <ATRIBUICAO> | <EXPRESSAO> | <ESCRITA_ARQUIVO> | <LEITURA_ARQUIVO> | <EXECUCAO> | <RUN>;
-<LEITURA_ARQUIVO> ::= NOME_VARIAVEL "<-" <EXPRESSAO>;
-<ESCRITA_ARQUIVO> ::= <EXPRESSAO> "->" <EXPRESSAO>;
-<ATRIBUICAO> ::= NOME_VARIAVEL #7 "=" <ATRIBUIVEIS>;
-<ATRIBUIVEIS> ::= <EXPRESSAO> | <EXECUCAO> | RUN <RUN>;
-<EXPRESSAO> ::= <EXPRESSAO> "+" <A> #3 | <EXPRESSAO> "-" #4 <A> | <A>;
+<LINHA> ::= <ATRIBUICAO> | <EXPRESSAO> | <ESCRITA_ARQUIVO> | <LEITURA_ARQUIVO> | <PRINT_OUT> | <RUN>;
+<LEITURA_ARQUIVO> ::= NOME_VARIAVEL #7 "<-" <EXPRESSAO> #10;
+<ESCRITA_ARQUIVO> ::= <EXPRESSAO> "->" <EXPRESSAO> #11;
+<ATRIBUICAO> ::= NOME_VARIAVEL #7 "=" <ATRIBUIVEIS> #8;
+<ATRIBUIVEIS> ::= <EXPRESSAO> | <RUN>;
+<EXPRESSAO> ::= <EXPRESSAO> "+" <A> #3 | <EXPRESSAO> "-" <A> #4 | <A>;
 <A> ::= <A> "*"  <B> #5 | <A> "/" <B> #6 | <B>;
 <B> ::= "-" <B> | <C>;
-<C> ::= "(" <EXPRESSAO> ")" | STRING #2 | INTEIRO #1 | NOME_VARIAVEL;
-<EXECUCAO> ::= PALAVRA_RESERVADA <EXPRESSAO>;
-<RUN> ::= <EXPRESSAO> "," CODIGO;
+<C> ::= "(" <EXPRESSAO> ")" | STRING #2 | INTEIRO #1 | NOME_VARIAVEL #9;
+<PRINT_OUT> ::= PRINT_OUT <EXPRESSAO>;
+<RUN> ::= RUN <EXPRESSAO> "," CODIGO #13;
+
+
