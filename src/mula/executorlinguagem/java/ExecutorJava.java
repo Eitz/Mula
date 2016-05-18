@@ -1,8 +1,8 @@
-package mula.executorlinguagem.cassiano;
+package mula.executorlinguagem.java;
 
 import mula.executorlinguagem.ExecutorLinguagem;
 
-public class ExecutorLinguagemCassianoWrapper implements ExecutorLinguagem {
+public class ExecutorJava implements ExecutorLinguagem {
 
 	private final ExecutorCodigoJava executor = new ExecutorCodigoJava();
 	

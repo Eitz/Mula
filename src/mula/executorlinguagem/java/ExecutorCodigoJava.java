@@ -1,4 +1,4 @@
-package mula.executorlinguagem.cassiano;
+package mula.executorlinguagem.java;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

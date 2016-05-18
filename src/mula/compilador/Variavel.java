@@ -5,7 +5,7 @@ import mula.compilador.somador.impl.StringUtil;
 public class Variavel {
 	private Tipo tipo;
 	private String nome;
-	private Object valor;
+	private Object valor = new String();
 
 	public Variavel(Tipo tipo, String nome, Object valor) {
 		super();

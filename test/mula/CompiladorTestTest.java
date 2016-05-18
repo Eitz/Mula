@@ -135,6 +135,34 @@ public class CompiladorTestTest {
 // @formatter:on
 	}
 	
+	@Test
+	public void testReturnSoma(){
+		Mula.execute(
+			"a = run 'java', <% "+
+			"return 5+5;"+
+			"%>;" +
+			"out a;");
+		assertEquals(10,valorDe("a"));
+	}
+	
+	@Test
+	public void testApenasRetorno(){
+		Mula.execute(
+			"a = run 'java', <% "+
+			"return 5;"+
+			"%>;" +
+			"out a;");
+		assertEquals(5,valorDe("a"));
+	}
+	
+	@Test
+	public void testApenasPerl(){
+		Mula.execute(
+			"a = run 'perl', <% "+
+			"return 1 + 1;"+
+			"%>;");
+		assertEquals(2,valorDe("a"));
+	}
 
 	private Object valorDe(String key) {
 		return Mula.variaveis.get(key).getValor();

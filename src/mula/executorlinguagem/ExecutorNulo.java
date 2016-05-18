@@ -1,6 +1,6 @@
 package mula.executorlinguagem;
 
-public class ExecutorLinguagemNulo implements ExecutorLinguagem {
+public class ExecutorNulo implements ExecutorLinguagem {
 
 	@Override
 	public void executa(String valorDiretoOuValorDaVariavel) {
