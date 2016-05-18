@@ -1,8 +1,3 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package mula.compilador;
 
 import gals.LexicalError;
@@ -12,17 +7,14 @@ import gals.Semantico;
 import gals.Sintatico;
 import gals.SyntaticError;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.HashMap;
 import java.util.Stack;
 
 public class Mula {
-	public static Stack<Object> pilha = new Stack<>();
-	public static HashMap<String, Variavel> variaveis = new HashMap<>();
-
-	public static void execute(String mulaCode) {
+	public Stack<Object> pilha = new Stack<>();
+	public HashMap<String, Variavel> variaveis = new HashMap<>();
+	
+	public void execute(String mulaCode) {
 		Lexico lex = new Lexico(mulaCode);
 		Sintatico sin = new Sintatico();
 		Semantico sem = new Semantico();

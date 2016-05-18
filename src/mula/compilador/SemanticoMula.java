@@ -24,6 +24,7 @@ public class SemanticoMula {
 	private static int intB;
 	private static String nomeVariavel;
 	private static Variavel var;
+	private static final Mula mula = new Mula();
 
 	public static void executeAction(int action, Token token) throws Exception {
 		switch (action) {
@@ -96,8 +97,8 @@ public class SemanticoMula {
 
 	private static void declaraVariavel(Token token) {
 		nomeVariavel = token.getLexeme();
-		if (Mula.variaveis.containsKey(nomeVariavel)) {
-			var = Mula.variaveis.get(nomeVariavel);
+		if (mula.variaveis.containsKey(nomeVariavel)) {
+			var = mula.variaveis.get(nomeVariavel);
 		} else {
 			var = new Variavel(nomeVariavel);
 		}
@@ -113,7 +114,7 @@ public class SemanticoMula {
 
 	private static void empilhaValorVariavel(Token token) {
 		Variavel variavel = getVariavel(token.getLexeme());
-		Mula.pilha.push(variavel.getValor());
+		mula.pilha.push(variavel.getValor());
 	}
 
 	private static void leArquivo() throws IOException {
@@ -174,7 +175,7 @@ public class SemanticoMula {
 			}
 		};
 		
-		List<String> nomesVariaveis = new ArrayList<>(Mula.variaveis.keySet());
+		List<String> nomesVariaveis = new ArrayList<>(mula.variaveis.keySet());
 		Collections.sort(nomesVariaveis, comparator);
 		return nomesVariaveis;
 	}
@@ -182,7 +183,7 @@ public class SemanticoMula {
 	private static String executaReplace(String codigoFonte,
 			List<String> nomesVariaveis) {
 		for (String nomeVariavel : nomesVariaveis) {
-			Variavel v = Mula.variaveis.get(nomeVariavel);
+			Variavel v = mula.variaveis.get(nomeVariavel);
 			String valorVariavel = v.getValor().toString();
 			codigoFonte = codigoFonte.replaceAll("%=" + nomeVariavel,
 					valorVariavel);
@@ -196,7 +197,7 @@ public class SemanticoMula {
 	}
 
 	private static Object pop() {
-		return Mula.pilha.pop();
+		return mula.pilha.pop();
 	}
 
 	private static String popValue() {
@@ -204,15 +205,15 @@ public class SemanticoMula {
 	}
 
 	private static void put(String nomeVariavel2, Variavel var2) {
-		Mula.variaveis.put(nomeVariavel, var);
+		mula.variaveis.put(nomeVariavel, var);
 	}
 
 	private static Object push(Object item) {
-		return Mula.pilha.push(item);
+		return mula.pilha.push(item);
 	}
 
 	private static Variavel getVariavel(String lexeme) {
-		return Mula.variaveis.get(lexeme);
+		return mula.variaveis.get(lexeme);
 	}
 
 	private static String getValorDiretoOuValorDaVariavel(Object valorOuVariavel) {
