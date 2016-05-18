@@ -24,7 +24,6 @@ Suporte a:
 ###Todos
 
  - Escrever testes
- - Fornecer suporte a Perl
  - Criar editor
 
 ### License
