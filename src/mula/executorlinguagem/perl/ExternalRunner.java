@@ -20,6 +20,7 @@ public class ExternalRunner {
 			sb.append(s).append("\n");
 		}
 		String texto = sb.toString();
+		System.out.println(texto);
 		Pattern pattern = Pattern.compile("MULA_OUT:'([^']*)'");
 		Matcher matcher = pattern.matcher(texto);
 		Object val = null;
@@ -31,8 +32,13 @@ public class ExternalRunner {
 	}
 
 	public Object run(String language, String code) throws IOException {
-		return runScript("perl", "'/home/cesar/Dropbox/UNIVALI/6/GRAFOS/workspace/mula/interpreters/perl/run.pl'", "--MULA_CODE", "'"
-				+ code + "'");
+		String commands[] = {
+				"perl",
+				"./interpreters/perl/run.pl",
+				"--MULA_CODE", 
+				code 
+				};
+		return runScript(commands);
 	}
 
 }
