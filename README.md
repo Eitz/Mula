@@ -6,7 +6,8 @@ Suporte a:
   - Escrita em arquivo
   - Leitura de arquivo
   - Operações matemáticas básicas
-  - Excução de linguagem Java (comandos básicos)
+  - Execução de linguagem Java (comandos básicos)
+  - Execução de linguagem Perl
   - Sintax highlight Sublime Text
 
 ### Instalação e execução
