@@ -34,7 +34,7 @@ public class ExternalRunner {
 	public Object run(String language, String code) throws IOException {
 		String commands[] = {
 				"perl",
-				"./interpreters/perl/run.pl",
+				System.getProperty("user.home") + "/.mula/interpreters/perl/run.pl",
 				"--MULA_CODE", 
 				code 
 				};

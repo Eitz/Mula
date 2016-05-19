@@ -1,11 +1,18 @@
 contador = 0;
 soma = run 'perl', <%
-	return 1;
+	my $numero = %=contador;
+	$numero++;
+	return $numero + 31;
 %>;
 
-
-nome = run 'java', <%
-	return "resultado" + "da" + "soma";
+soma = run 'java', <%
+	int s = %=soma;
+	s*=7;
 %>;
-soma -> nome;
+
+arquivo = run 'java', <%
+	return "resultado_operacao.txt";
+%>;
+
+soma -> arquivo;
 
