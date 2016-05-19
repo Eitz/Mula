@@ -161,7 +161,7 @@ public class CompiladorTestTest {
 			"a = run 'perl', <% "+
 			"return 1 + 1;"+
 			"%>;");
-		assertEquals(2,valorDe("a"));
+		assertEquals("2",valorDe("a"));
 	}
 
 	private Object valorDe(String key) {

@@ -1,1 +1,0 @@
-A variável deve tem texto deste arquivo.
