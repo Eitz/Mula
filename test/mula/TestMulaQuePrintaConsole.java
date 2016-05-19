@@ -43,7 +43,7 @@ public class TestMulaQuePrintaConsole {
 	@Test
 	public void testApenasPrintPerl() {
 		mula.execute("run 'perl', <% " + "print \"Hello World\";" + "%>;");
-		assertEquals("Hello World", outContent.toString());
+		assertTrue(outContent.toString().contains("Hello World"));
 	}
 
 }

@@ -187,7 +187,23 @@ public class MulaTest {
 	}
 
 	private Object valorDe(String key) {
-		return mula.variaveis.get(key).getValor();
+		return mula.getValorDe(key);
 	}
 
+	@Test
+	public void testIntegracao() {
+		// @formatter:off
+		mula.execute(
+				"soma = run 'perl', <% " +
+				"	return 1;" +
+				"%>;" +
+
+				"nome = run 'java', <% " +
+				"	return \"abc\"; " + 
+				"%>; " +
+				"soma -> nome;");
+		//@formatter:off
+		assertEquals(1, valorDe("soma"));
+	}
+	
 }

@@ -1,5 +1,8 @@
 package mula.compilador;
 
+import gals.Constants;
+import gals.SemanticError;
+import gals.Semantico;
 import gals.Token;
 
 import java.io.IOException;
@@ -10,7 +13,9 @@ import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Collections;
 import java.util.Comparator;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Stack;
 
 import mula.compilador.somador.Somador;
 import mula.compilador.somador.SomadorFactory;
@@ -18,15 +23,17 @@ import mula.compilador.somador.impl.StringUtil;
 import mula.executorlinguagem.ExecutorLinguagem;
 import mula.executorlinguagem.ExecutorLinguagemFactory;
 
-public class SemanticoMula {
+public class SemanticoMula extends Semantico implements Constants {
 
 	private static int intA;
 	private static int intB;
 	private static String nomeVariavel;
 	private static Variavel var;
-	private static final Mula mula = new Mula();
 
-	public static void executeAction(int action, Token token) throws Exception {
+	public static Stack<Object> pilha = new Stack<>();
+	public static HashMap<String, Variavel> variaveis = new HashMap<>();
+
+	public void executeAction(int action, Token token) throws SemanticError {
 		switch (action) {
 		case 1:
 			push(Integer.parseInt(token.getLexeme()));
@@ -97,8 +104,8 @@ public class SemanticoMula {
 
 	private static void declaraVariavel(Token token) {
 		nomeVariavel = token.getLexeme();
-		if (mula.variaveis.containsKey(nomeVariavel)) {
-			var = mula.variaveis.get(nomeVariavel);
+		if (variaveis.containsKey(nomeVariavel)) {
+			var = variaveis.get(nomeVariavel);
 		} else {
 			var = new Variavel(nomeVariavel);
 		}
@@ -114,25 +121,40 @@ public class SemanticoMula {
 
 	private static void empilhaValorVariavel(Token token) {
 		Variavel variavel = getVariavel(token.getLexeme());
-		mula.pilha.push(variavel.getValor());
+		pilha.push(variavel.getValor());
 	}
 
-	private static void leArquivo() throws IOException {
+	private static void leArquivo() {
 		String nomeArquivo = popValue();
 		String nomeVariavel = pop().toString();
 		String conteudoArquivo = leConteudoArquivo(nomeArquivo);
 		getVariavel(nomeVariavel).setValor(conteudoArquivo);
 	}
 
-	private static String leConteudoArquivo(String nomeArquivo)
-			throws IOException {
+	private static String leConteudoArquivo(String nomeArquivo) {
+		try {
+			return leConteudo(nomeArquivo);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static String leConteudo(String nomeArquivo) throws IOException {
 		List<String> lines = Files.readAllLines(Paths.get(nomeArquivo));
 		StringBuilder conteudoArquivo = new StringBuilder();
 		lines.forEach(conteudoArquivo::append);
 		return conteudoArquivo.toString();
 	}
 
-	private static void escreveArquivo() throws IOException {
+	private static void escreveArquivo() {
+		try {
+			tentaEscreveArquivo();
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static void tentaEscreveArquivo() throws IOException {
 		String nomeArquivo = popValue();
 		String conteudoEscrever = popValue();
 		Files.write(Paths.get(nomeArquivo), Arrays.asList(conteudoEscrever),
@@ -175,7 +197,7 @@ public class SemanticoMula {
 			}
 		};
 		
-		List<String> nomesVariaveis = new ArrayList<>(mula.variaveis.keySet());
+		List<String> nomesVariaveis = new ArrayList<>(variaveis.keySet());
 		Collections.sort(nomesVariaveis, comparator);
 		return nomesVariaveis;
 	}
@@ -183,7 +205,7 @@ public class SemanticoMula {
 	private static String executaReplace(String codigoFonte,
 			List<String> nomesVariaveis) {
 		for (String nomeVariavel : nomesVariaveis) {
-			Variavel v = mula.variaveis.get(nomeVariavel);
+			Variavel v = variaveis.get(nomeVariavel);
 			String valorVariavel = v.getValor().toString();
 			codigoFonte = codigoFonte.replaceAll("%=" + nomeVariavel,
 					valorVariavel);
@@ -197,7 +219,7 @@ public class SemanticoMula {
 	}
 
 	private static Object pop() {
-		return mula.pilha.pop();
+		return pilha.pop();
 	}
 
 	private static String popValue() {
@@ -205,15 +227,15 @@ public class SemanticoMula {
 	}
 
 	private static void put(String nomeVariavel2, Variavel var2) {
-		mula.variaveis.put(nomeVariavel, var);
+		variaveis.put(nomeVariavel, var);
 	}
 
 	private static Object push(Object item) {
-		return mula.pilha.push(item);
+		return pilha.push(item);
 	}
 
 	private static Variavel getVariavel(String lexeme) {
-		return mula.variaveis.get(lexeme);
+		return variaveis.get(lexeme);
 	}
 
 	private static String getValorDiretoOuValorDaVariavel(Object valorOuVariavel) {
@@ -221,6 +243,10 @@ public class SemanticoMula {
 			return ((Variavel) valorOuVariavel).getValor().toString();
 		else
 			return valorOuVariavel.toString();
+	}
+
+	public Object getValorDe(String key) {
+		return variaveis.get(key).getValor();
 	}
 
 }
