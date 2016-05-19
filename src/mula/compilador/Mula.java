@@ -3,7 +3,6 @@ package mula.compilador;
 import gals.LexicalError;
 import gals.Lexico;
 import gals.SemanticError;
-import gals.Semantico;
 import gals.Sintatico;
 import gals.SyntaticError;
 

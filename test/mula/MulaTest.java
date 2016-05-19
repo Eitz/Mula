@@ -166,10 +166,10 @@ public class MulaTest {
 		mula.execute(
 // @formatter:off
 			"a = run 'perl', <% "+
-			"return 1 + 1;"+
+				"return 1 + 1;"+
 			"%>;");
+		assertEquals("2",valorDe("a"));
 // @formatter:on
-		assertEquals(2, Integer.parseInt(valorDe("a").toString()));
 	}
 
 	@Test
@@ -194,6 +194,7 @@ public class MulaTest {
 	public void testIntegracao() {
 		// @formatter:off
 		mula.execute(
+				"contador = 0;" +
 				"soma = run 'perl', <% " +
 				"	return 1;" +
 				"%>;" +
@@ -203,7 +204,7 @@ public class MulaTest {
 				"%>; " +
 				"soma -> nome;");
 		//@formatter:off
-		assertEquals(1, valorDe("soma"));
+		assertEquals("1", valorDe("soma"));
 	}
 	
 }
