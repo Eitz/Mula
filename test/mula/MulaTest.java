@@ -46,6 +46,7 @@ public class MulaTest {
 		mula.execute(
 				"a = 2 * (3 + 5);" + 
 				"b = 14 * (10 / 5);"
+				+ " out b;"
 			);
 //@formatter:on
 		assertValoresSomaCorretos();
@@ -64,6 +65,34 @@ public class MulaTest {
 			  + "a = a * 3;");
 //@formatter:on
 		assertEquals(6, valorDe("a"));
+	}
+
+	@Test
+	public void testSomaString() {
+//@formatter:off
+		mula.execute(
+				"a = 2 + \"a\";"
+		);
+//@formatter:on
+		assertEquals("2a", valorDe("a"));
+	}
+	
+	@Test
+	public void testSomaIntRetornado() {
+//@formatter:off
+		mula.execute(
+			"	a = run 'perl', <%"+
+			"	my $n = 40;"+
+		"	$n = 30 - 4;"+
+		"		return $n;"+
+		"	%>;"+
+"			b = run 'java', <%"+
+"				return 1;"+
+"			%>;"+
+"			c = a + b;"
+		);
+//@formatter:on
+		assertEquals(27, valorDe("c"));
 	}
 
 	@Test
