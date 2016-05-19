@@ -14,7 +14,7 @@ import org.junit.After;
 import org.junit.Before;
 import org.junit.Test;
 
-public class CompiladorTestTest {
+public class MulaTest {
 
 	private static final String TEXTO_ARQUIVO_TESTE = "A variável deve tem texto deste arquivo.";
 	private static final String VAR_TXT = "var.txt";
@@ -22,11 +22,14 @@ public class CompiladorTestTest {
 	private static final String ARQUIVO_TESTE = "teste.txt";
 	private static final String ARQUIVO_TESTE_BLA_BLA = "textoBlaBla.txt";
 
+	private Mula mula;
+
 	@Before
 	public void setup() throws Exception {
 		Files.write(Paths.get(VAR_TXT), Arrays.asList("37"));
 		Files.write(Paths.get(ARQUIVO_TESTE),
 				Arrays.asList("A variável deve tem texto deste arquivo."));
+		mula = new Mula();
 	}
 
 	@After
@@ -39,12 +42,12 @@ public class CompiladorTestTest {
 
 	@Test
 	public void test() {
-		//@formatter:off
-		Mula.execute(
+//@formatter:off
+		mula.execute(
 				"a = 2 * (3 + 5);" + 
 				"b = 14 * (10 / 5);"
 			);
-		//@formatter:on
+//@formatter:on
 		assertValoresSomaCorretos();
 	}
 
@@ -55,17 +58,17 @@ public class CompiladorTestTest {
 
 	@Test
 	public void test_2() {
-		//@formatter:off
-		Mula.execute(
+//@formatter:off
+		mula.execute(
 				"a = 2;"
 			  + "a = a * 3;");
-		//@formatter:on
+//@formatter:on
 		assertEquals(6, valorDe("a"));
 	}
 
 	@Test
 	public void testLeituraArquivo() {
-		Mula.execute("a <- 'teste.txt';");
+		mula.execute("a <- 'teste.txt';");
 		assertEquals(TEXTO_ARQUIVO_TESTE, valorDe("a"));
 	}
 
@@ -91,14 +94,13 @@ public class CompiladorTestTest {
 
 	@Test
 	public void testEscritaArquivo() {
-		Mula.execute("'string do texto' -> '" + TEXTO_ESCRITO_TXT
-				+ "';");
+		mula.execute("'string do texto' -> '" + TEXTO_ESCRITO_TXT + "';");
 		assertEquals("string do texto", leTexto(new File(TEXTO_ESCRITO_TXT)));
 	}
 
 	@Test
 	public void testEscritaArquivoVariavel() {
-		Mula.execute(
+		mula.execute(
 // @formatter:off
 			"texto = 'bla bla';" + 
 			"texto -> 'textoBlaBla.txt';");
@@ -108,7 +110,7 @@ public class CompiladorTestTest {
 
 	@Test
 	public void executaJava() {
-		Mula.execute(
+		mula.execute(
 // @formatter:off
 			"var <- 'var.txt';"+ // var.txt = 37
 			"var2 = 4; "+
@@ -125,7 +127,7 @@ public class CompiladorTestTest {
 
 	@Test
 	public void executaJavaMostraNome() {
-		Mula.execute(
+		mula.execute(
 // @formatter:off
 			"nomeCassiano = 'Cassiano';" +
 			"run 'java', <%"
@@ -134,38 +136,75 @@ public class CompiladorTestTest {
 			);
 // @formatter:on
 	}
-	
+
 	@Test
-	public void testReturnSoma(){
-		Mula.execute(
+	public void testReturnSoma() {
+		mula.execute(
+// @formatter:off
 			"a = run 'java', <% "+
 			"return 5+5;"+
 			"%>;" +
 			"out a;");
-		assertEquals(10,valorDe("a"));
+// @formatter:on
+		assertEquals(10, valorDe("a"));
 	}
-	
+
 	@Test
-	public void testApenasRetorno(){
-		Mula.execute(
+	public void testApenasRetorno() {
+		mula.execute(
+// @formatter:off
 			"a = run 'java', <% "+
 			"return 5;"+
 			"%>;" +
 			"out a;");
-		assertEquals(5,valorDe("a"));
+// @formatter:on
+		assertEquals(5, valorDe("a"));
 	}
-	
+
 	@Test
-	public void testApenasPerl(){
-		Mula.execute(
+	public void testApenasRetornoPerl() {
+		mula.execute(
+// @formatter:off
 			"a = run 'perl', <% "+
 			"return 1 + 1;"+
 			"%>;");
 		assertEquals("2",valorDe("a"));
+// @formatter:on
+		assertEquals(2, Integer.parseInt(valorDe("a").toString()));
+	}
+
+	@Test
+	public void testApenasRetornoPerlEJava() {
+		mula.execute(
+// @formatter:off
+			"a = run 'perl', <% "+
+			"return 1 + 1;"+
+			"%>;" + 
+			"b = run 'java', <%" +
+			"return %=a * 50;"  +
+			"%>;");
+		// @formatter:on
+		assertEquals(100, Integer.parseInt(valorDe("b").toString()));
 	}
 
 	private Object valorDe(String key) {
-		return Mula.variaveis.get(key).getValor();
+		return mula.getValorDe(key);
 	}
 
+	@Test
+	public void testIntegracao() {
+		// @formatter:off
+		mula.execute(
+				"soma = run 'perl', <% " +
+				"	return 1;" +
+				"%>;" +
+
+				"nome = run 'java', <% " +
+				"	return \"abc\"; " + 
+				"%>; " +
+				"soma -> nome;");
+		//@formatter:off
+		assertEquals("1", valorDe("soma"));
+	}
+	
 }

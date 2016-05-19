@@ -13,6 +13,8 @@ public class ExecutorPerl implements ExecutorLinguagem {
 	public void executa(String codigo) {
 		try {
 			retorno = runner.run("perl", codigo);
+			if(retorno.toString().equals("VOID"))
+				retorno = null;
 		} catch (IOException e) {
 			e.printStackTrace();
 		}

@@ -8,6 +8,8 @@ import mula.compilador.Mula;
 
 public class MulaExecutor {
 
+	private static final Mula mula = new Mula();
+	
 	public static void main(String[] args) {
 		if(args.length > 0){
 			String file = args[0];
@@ -23,7 +25,7 @@ public class MulaExecutor {
 
 	private static void executar(String file) throws IOException {
 		String mulaCode = lerMulaCode(file);
-		Mula.execute(mulaCode);
+		mula.execute(mulaCode);
 	}
 
 	private static String lerMulaCode(String file) throws IOException {

@@ -1,0 +1,11 @@
+contador = 0;
+soma = run 'perl', <%
+	return 1;
+%>;
+
+
+nome = run 'java', <%
+	return "resultado" + "da" + "soma";
+%>;
+soma -> nome;
+

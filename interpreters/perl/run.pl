@@ -69,6 +69,10 @@ sub interpretCode {
 
 	# saving args in Mula
 	$Mula::args = \%ARGV;
+	
+	# required as we don't want to explicity return the last statement
+	# a "return" should be obligatory in the perl code provided
+	$code .= "return 'VOID';";
 
 	# error gets stored in $@ after eval is runt
 	my $output 	= scapeSingleQuotes(eval "$code");
