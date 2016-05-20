@@ -11,7 +11,7 @@ Suporte a:
   - Sintax highlight Sublime Text
 
 ### Instalação e execução
- 1. Mova o arquivo mula para a pasta /usr/bin, com permissão de execução
+ 1. Navegue até a pasta onde está o arquivo <code>install.sh</code> e execute ./install.sh
  2. Escreva um arquivo de teste e salve como hello.mula
      ```
     out 'Hello World Mula!!';
@@ -26,9 +26,5 @@ Suporte a:
  - Escrever testes
  - Criar editor
 
-### License
-----
+### Licença
 MIT
-
-
-**Livre!**
