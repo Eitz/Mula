@@ -246,7 +246,9 @@ public class SemanticoMula extends Semantico implements Constants {
 	}
 
 	public Object getValorDe(String key) {
-		return variaveis.get(key).getValor();
+		if(variaveis.containsKey(key))
+			return variaveis.get(key).getValor();
+		return "undefined";
 	}
 
 }
